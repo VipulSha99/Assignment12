@@ -1,6 +1,6 @@
 # Assignment 11
 
-## Add unit test cases to previous Angular application.✨
+## Add unit test cases to previous application.✨
 
 # Run code for both client and server separately -
 #### Install dependencies:
