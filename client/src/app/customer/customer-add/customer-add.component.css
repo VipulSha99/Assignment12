@@ -1,0 +1,30 @@
+.input_tag {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 10px;
+    width: 50%;
+}
+
+.input_tag input {
+    height: 30px;
+    font-size: 1em;
+    background-color: white;
+    border-color: #cbb3b3;
+    border-radius: 10px;
+}
+
+.btn {
+    padding: 10px;
+    padding-bottom: 25px;
+    background-color: dodgerblue !important;
+    color: white;
+    cursor: pointer;
+}
+
+.input_tag p {
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+    color: red;
+}

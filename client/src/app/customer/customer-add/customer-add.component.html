@@ -1,0 +1,20 @@
+<form class="input_tag" [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+    <div>
+        <input type="text" placeholder="Name" required formControlName="name" />
+        <p *ngIf="!addUserForm.get('name')?.valid && addUserForm.get('name')?.touched">This field is required!</p>
+    </div>
+    <div>
+        <input type="text" placeholder="Website" required formControlName="website" />
+        <p *ngIf="!addUserForm.get('website')?.valid && addUserForm.get('website')?.touched">This field is required!</p>
+    </div>
+    <div>
+        <input type="text" placeholder="Address" required formControlName="address" />
+        <p *ngIf="!addUserForm.get('address')?.valid && addUserForm.get('address')?.touched">Please enter a valid email!</p>
+    </div>
+    <div>
+        <input type="submit" class="btn" value="Add Customer"/>
+        <p *ngIf="!addUserForm?.valid && addButtonClicked">Please Enter the valid data!</p>
+    </div>
+</form>
+
+
