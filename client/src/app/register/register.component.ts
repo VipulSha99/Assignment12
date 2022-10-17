@@ -23,10 +23,10 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.customerService.getCustomer().subscribe(newData=>{
+    this.customerService.getCustomer().subscribe((newData:customerModel[])=>{
       this.customers = newData;
     });
-    this.roleService.getRole().subscribe(newData=>{
+    this.roleService.getRole().subscribe((newData:role[])=>{
       this.Roles = newData;
     });
     this.addUserForm = new FormGroup({

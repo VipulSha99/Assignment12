@@ -11,13 +11,13 @@ export enum customerColumnName{
     edit = "Edit"
 }
 
-interface customerObject {
+export interface customerObject {
     id?: nString;
     name: nString;
     website: nString;
     address: nString;
-    users: UserModel[];
-    createdAt: string;
+    users?: UserModel[];
+    createdAt?: string;
   }
   
   export class customerModel {
@@ -26,7 +26,7 @@ interface customerObject {
     website: nString;
     address: nString;
     users?: UserModel[];
-    createdAt: string;
+    createdAt?: string;
   
     constructor(dataObject: customerObject) {
       this.id = dataObject['id'];

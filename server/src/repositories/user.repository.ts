@@ -4,7 +4,6 @@ import {
   repository,
   BelongsToAccessor,
 } from '@loopback/repository';
-import {HttpErrors} from '@loopback/rest';
 import {PgDataSource} from '../datasources';
 import {User, UserRelations, Customer, Role} from '../models';
 import {CustomerRepository} from './customer.repository';

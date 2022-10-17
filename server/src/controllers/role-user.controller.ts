@@ -21,6 +21,7 @@ import {
   Role,
   User
 } from '../models';
+import { Permission } from '../permission';
 import {RoleRepository} from '../repositories';
 
 export class RoleUserController {
@@ -29,7 +30,7 @@ export class RoleUserController {
   ) { }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getRoleUsers']})
+  @authorize({permissions: [Permission.getRoleUsers]})
   @get('/roles/{id}/users', {
     responses: {
       '200': {
@@ -50,7 +51,7 @@ export class RoleUserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['createRoleUser']})
+  @authorize({permissions: [Permission.createRoleUser]})
   @post('/roles/{id}/users', {
     responses: {
       '200': {
@@ -77,7 +78,7 @@ export class RoleUserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateRoleUser']})
+  @authorize({permissions: [Permission.updateRoleUser]})
   @patch('/roles/{id}/users', {
     responses: {
       '200': {
@@ -102,7 +103,7 @@ export class RoleUserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['deleteRoleUser']})
+  @authorize({permissions: [Permission.deleteRoleUser]})
   @del('/roles/{id}/users', {
     responses: {
       '200': {

@@ -14,6 +14,7 @@ import {
 import { authenticate, STRATEGY } from 'loopback4-authentication';
 import { authorize } from 'loopback4-authorization';
 import {Customer} from '../models';
+import { Permission } from '../permission';
 import {CustomerRepository} from '../repositories';
 
 export class CustomersController {
@@ -23,7 +24,7 @@ export class CustomersController {
   ) {}
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['createCustomer']})
+  @authorize({permissions: [Permission.createCustomer]})
   @post('/customers')
   @response(200, {
     description: 'Customer model instance',
@@ -46,7 +47,7 @@ export class CustomersController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getCustomersCount']})
+  @authorize({permissions: [Permission.getCustomersCount]})
   @get('/customers/count')
   @response(200, {
     description: 'Customer model count',
@@ -56,8 +57,7 @@ export class CustomersController {
     return this.customerRepository.count(where);
   }
 
-  // @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getCustomers']})
+  @authorize({permissions: [Permission.getCustomers]})
   @get('/customers')
   @response(200, {
     description: 'Array of Customer model instances',
@@ -73,11 +73,11 @@ export class CustomersController {
   async find(
     @param.filter(Customer) filter?: Filter<Customer>,
   ): Promise<Customer[]> {
-    return this.customerRepository.find({include: ['users']});
+    return this.customerRepository.find(filter);
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateAllCustomers']})
+  @authorize({permissions: [Permission.updateAllCustomers]})
   @patch('/customers')
   @response(200, {
     description: 'Customer PATCH success count',
@@ -98,7 +98,7 @@ export class CustomersController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getCustomer']})
+  @authorize({permissions: [Permission.getCustomer]})
   @get('/customers/{id}')
   @response(200, {
     description: 'Customer model instance',
@@ -113,11 +113,11 @@ export class CustomersController {
     @param.filter(Customer, {exclude: 'where'})
     filter?: FilterExcludingWhere<Customer>,
   ): Promise<Customer> {
-    return this.customerRepository.findById(id, {include: ['users']});
+    return (await this.customerRepository.find({where:{id:id}},filter))[0]
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateCustomer']})
+  @authorize({permissions: [Permission.updateCustomer]})
   @patch('/customers/{id}')
   @response(204, {
     description: 'Customer PATCH success',
@@ -138,7 +138,7 @@ export class CustomersController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['replaceCustomer']})
+  @authorize({permissions: [Permission.replaceCustomer]})
   @put('/customers/{id}')
   @response(204, {
     description: 'Customer PUT success',
@@ -151,7 +151,7 @@ export class CustomersController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['deleteCustomer']})
+  @authorize({permissions: [Permission.deleteCustomer]})
   @del('/customers/{id}')
   @response(204, {
     description: 'Customer DELETE success',

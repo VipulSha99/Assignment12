@@ -6,14 +6,14 @@ import {securityId} from '@loopback/security';
 import {VerifyFunction} from 'loopback4-authentication';
 
 import {UserRepository} from '../repositories';
-import {jwtService} from '../services/jwt.service';
+import {JwtService} from '../services/jwt.service';
 
 export class BearerTokenVerifyProvider
   implements Provider<VerifyFunction.BearerFn>
 {
   constructor(
-    @service(jwtService)
-    public jwtService: jwtService,
+    @service(JwtService)
+    public jwtService: JwtService,
     @repository(UserRepository)
     public userRepository: UserRepository,
   ) {}
@@ -25,15 +25,15 @@ export class BearerTokenVerifyProvider
       }
       try {
         const userProfile = await this.jwtService.verifyToken(token);
-        var user = this.userRepository.findOne({
+        const user = await this.userRepository.findOne({
           where: {id: userProfile[securityId]},
         });
+        return user;
       } catch {
         throw new HttpErrors.Unauthorized(
           `Error occured while verifying token`,
         );
       }
-      return user;
     };
   }
 }
