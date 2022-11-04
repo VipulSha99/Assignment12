@@ -4,7 +4,7 @@ import {UserProfile} from '@loopback/security';
 import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {TokenService} from '@loopback/authentication';
 
-export class jwtService {
+export class JwtService {
   constructor(
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public tokenService: TokenService,
@@ -30,10 +30,10 @@ export class jwtService {
 
   async verifyToken(token: string): Promise<UserProfile> {
     try {
-      var user = this.tokenService.verifyToken(token);
+      const user = await this.tokenService.verifyToken(token);
+      return user;
     } catch {
       throw new HttpErrors.Unauthorized(`Error while verifying token`);
     }
-    return user;
   }
 }

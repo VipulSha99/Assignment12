@@ -47,15 +47,18 @@ export class MySequence implements SequenceHandler {
       if (authUser) {
       //   console.log(`Please Login`);
       // } else {
-        let role = await this.roleRepository.findById(authUser.rolekey);
-
-        const isAccessAllowed: boolean = await this.checkAuthorisation(
-          role.permissions,
-          request,
-        );
-
-        if (!isAccessAllowed) {
-          throw new HttpErrors.Forbidden(AuthorizeErrorKeys.NotAllowedAccess);
+        const role = await this.roleRepository.findById(authUser.rolekey);
+        if(role.permissions){
+          const isAccessAllowed: boolean = await this.checkAuthorisation(
+            role.permissions,
+            request,
+          );
+          if (!isAccessAllowed) {
+            throw new HttpErrors.Forbidden(AuthorizeErrorKeys.NotAllowedAccess);
+          }
+        }
+        else{
+          throw new HttpErrors.UnprocessableEntity("Permissions in Role Table not found");
         }
       }
       const result = await this.invoke(route, args);

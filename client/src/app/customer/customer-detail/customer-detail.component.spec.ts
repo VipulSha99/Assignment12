@@ -1,4 +1,7 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CookieModule } from 'ngx-cookie';
 
 import { CustomerDetailComponent } from './customer-detail.component';
 
@@ -8,7 +11,12 @@ describe('CustomerDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CustomerDetailComponent ]
+      declarations: [ CustomerDetailComponent ],
+      imports: [
+        CookieModule.withOptions(),
+        RouterTestingModule,
+        HttpClientTestingModule,
+      ],
     })
     .compileComponents();
 

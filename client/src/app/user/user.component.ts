@@ -10,7 +10,6 @@ import { UserService } from 'src/app/user/user.service';
 export class UserComponent{
 
   userData: UserModel[] = [];
-  loadButton="Load Data";
   showTable = false;
 
   constructor(private userService: UserService) { }
@@ -22,7 +21,6 @@ export class UserComponent{
   }
 
   onLoadData(){
-    this.loadButton = "Refresh data";
     this.showTable = true;
     this.userService.getUsers().subscribe(
       responseData=>{

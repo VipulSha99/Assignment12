@@ -2,7 +2,7 @@ import {inject, service} from '@loopback/core';
 import {
   Count,
   CountSchema,
-  Filter, repository,
+  Filter, FilterExcludingWhere, repository,
   Where
 } from '@loopback/repository';
 import {
@@ -19,9 +19,10 @@ import {
 } from 'loopback4-authentication';
 import { authorize } from 'loopback4-authorization';
 import {User} from '../models';
+import { Permission } from '../permission';
 import {UserRepository} from '../repositories';
 import { BcryptHasher } from '../services/hash.password.bcrypt';
-import {jwtService} from '../services/jwt.service';
+import {JwtService} from '../services/jwt.service';
 
 const CredentialsSchema: SchemaObject = {
   type: 'object',
@@ -48,8 +49,8 @@ export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-    @service(jwtService)
-    public jwtService: jwtService,
+    @service(JwtService)
+    public jwtService: JwtService,
     @inject('hash.password.bcrypt') public hasher: BcryptHasher,
   ) {}
 
@@ -114,7 +115,7 @@ export class UserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getUserCount']})
+  @authorize({permissions: [Permission.getUserCount]})
   @get('/users/count')
   @response(200, {
     description: 'User model count',
@@ -125,7 +126,7 @@ export class UserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getUsers']})
+  @authorize({permissions: [Permission.getUsers]})
   @get('/users')
   @response(200, {
     description: 'Array of User model instances',
@@ -139,13 +140,11 @@ export class UserController {
     },
   })
   async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
-    return this.userRepository.find({
-      include: [{relation: 'customer'}, {relation: 'Role'}],
-    });
+    return this.userRepository.find(filter);
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateAllUsers']})
+  @authorize({permissions: [Permission.updateAllUsers]})
   @patch('/users')
   @response(200, {
     description: 'User PATCH success count',
@@ -166,7 +165,7 @@ export class UserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getUser']})
+  @authorize({permissions: [Permission.getUser]})
   @get('/users/{id}')
   @response(200, {
     description: 'User model instance',
@@ -176,14 +175,16 @@ export class UserController {
       },
     },
   })
-  async findById(@param.path.string('id') id: string): Promise<User> {
-    return this.userRepository.findById(id, {
-      include: [{relation: 'customer'}, {relation: 'Role'}],
-    });
+  async findById(@param.path.string('id') id: string,
+  @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>): Promise<User> {
+    // return this.userRepository.findById(id, {
+    //   include: [{relation: 'customer'}, {relation: 'Role'}],
+    // });
+    return (await this.userRepository.find({where:{id:id}},filter))[0]
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateUser']})
+  @authorize({permissions: [Permission.updateUser]})
   @patch('/users/{id}')
   @response(204, {
     description: 'User PATCH success',
@@ -204,7 +205,7 @@ export class UserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['replaceUser']})
+  @authorize({permissions: [Permission.replaceUser]})
   @put('/users/{id}')
   @response(204, {
     description: 'User PUT success',
@@ -217,7 +218,7 @@ export class UserController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['deleteUser']})
+  @authorize({permissions: [Permission.deleteUser]})
   @del('/users/{id}')
   @response(204, {
     description: 'User DELETE success',

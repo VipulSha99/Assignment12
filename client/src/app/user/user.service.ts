@@ -30,7 +30,8 @@ export class UserService {
       alert(`Login Required !`)
       this.router.navigateByUrl('')
     }
-    return this.http.get<{[key: string]:UserModel}>(this.userBaseUrl,{ 
+    let parameter = 'filter={"include":["customer","Role"]}';
+    return this.http.get<{[key: string]:UserModel}>(this.userBaseUrl+'?'+parameter,{ 
       headers: { "Authorization": `Bearer ${cookieUserId}` } }).pipe(
       map((responseData)=>{
         const userArray:UserModel[] = [];
@@ -76,6 +77,7 @@ export class UserService {
       alert(`Login Required !`)
       this.router.navigateByUrl('')
     }
-    return this.http.get<UserModel>(`${this.userBaseUrl}/${id}`, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
+    let parameter = 'filter={"include":["customer","Role"]}';
+    return this.http.get<UserModel>(`${this.userBaseUrl}/${id}?${parameter}`, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
   }
 }

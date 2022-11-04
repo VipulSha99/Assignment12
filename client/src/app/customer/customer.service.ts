@@ -16,7 +16,8 @@ export class CustomerService {
 
   getCustomer(){
     const cookieUserId = this.cookieService.get("id")
-    return this.http.get<customerModel[]>(this.customerBaseUrl, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
+    let parameter = 'filter={"include":["users"]}';
+    return this.http.get<customerModel[]>(this.customerBaseUrl+'?'+parameter, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
   }
   addCustomer(customerData:customerModel){
     const cookieUserId = this.cookieService.get("id")
@@ -49,7 +50,8 @@ export class CustomerService {
       alert(`Login Required !`)
       this.router.navigateByUrl('')
     }
-    return this.http.get<customerModel>(`${this.customerBaseUrl}/${id}`, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
+    let parameter = 'filter={"include":["users"]}';
+    return this.http.get<customerModel>(`${this.customerBaseUrl}/${id}?${parameter}`, { headers: { "Authorization": `Bearer ${cookieUserId}` } });
   }
 
 }

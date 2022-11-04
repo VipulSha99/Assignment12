@@ -7,10 +7,10 @@ export interface User{
     lastName: nString,
     email: nString,
     phoneNumber: number,
-    Role: [role:nString],
-    customer:[name:nString],
+    Role: {role:nString},
+    customer:{name:nString},
     address: nString,
-    createdAt?: string
+    createdAt: string
 }
 export class UserModel {
     id?: string;

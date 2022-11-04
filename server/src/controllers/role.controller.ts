@@ -20,6 +20,7 @@ import {
 import { authenticate, STRATEGY } from 'loopback4-authentication';
 import { authorize } from 'loopback4-authorization';
 import {Role} from '../models';
+import { Permission } from '../permission';
 import {RoleRepository} from '../repositories';
 
 export class RoleController {
@@ -52,7 +53,7 @@ export class RoleController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getRolesCount']})
+  @authorize({permissions: [Permission.getRolesCount]})
   @get('/roles/count')
   @response(200, {
     description: 'Role model count',
@@ -65,7 +66,7 @@ export class RoleController {
   }
 
   // @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['getRoles']})
+  @authorize({permissions: [Permission.getRoles]})
   @get('/roles')
   @response(200, {
     description: 'Array of Role model instances',
@@ -85,7 +86,7 @@ export class RoleController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateAllRoles']})
+  @authorize({permissions: [Permission.updateAllRoles]})
   @patch('/roles')
   @response(200, {
     description: 'Role PATCH success count',
@@ -120,11 +121,11 @@ export class RoleController {
     @param.path.string('id') id: string,
     @param.filter(Role, {exclude: 'where'}) filter?: FilterExcludingWhere<Role>
   ): Promise<Role> {
-    return this.roleRepository.findById(id, filter);
+    return (await this.roleRepository.find({where:{key:id}}))[0]
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['updateRole']})
+  @authorize({permissions: [Permission.updateRole]})
   @patch('/roles/{id}')
   @response(204, {
     description: 'Role PATCH success',
@@ -145,7 +146,7 @@ export class RoleController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['replaceRole']})
+  @authorize({permissions: [Permission.replaceRole]})
   @put('/roles/{id}')
   @response(204, {
     description: 'Role PUT success',
@@ -158,7 +159,7 @@ export class RoleController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @authorize({permissions: ['deleteRole']})
+  @authorize({permissions: [Permission.deleteRole]})
   @del('/roles/{id}')
   @response(204, {
     description: 'Role DELETE success',

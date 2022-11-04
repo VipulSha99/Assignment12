@@ -17,7 +17,8 @@ export class BcryptHasher implements PasswordHasher<string> {
     async hashPassword(password:string)
     {
         const salt=await genSalt(this.rounds)
-        return await hash(password,salt);
+        const hashedpass = await hash(password,salt)
+        return hashedpass ;
     }
    
 }

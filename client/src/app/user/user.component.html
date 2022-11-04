@@ -1,5 +1,5 @@
 <div class="main">
-    <button (click)="onLoadData()">{{loadButton}}</button>
+    <button (click)="onLoadData()" >{{showTable?'Refresh data':'Load Data'}}</button>
 </div>
 <div *ngIf="showTable">
     <app-user-add (updatedData)="onUpdatedData()"></app-user-add>
