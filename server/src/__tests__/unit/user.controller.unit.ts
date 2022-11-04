@@ -9,7 +9,6 @@ import {UserController} from '../../controllers';
 import {User} from '../../models';
 import { JwtService } from '../../services/jwt.service';
 import { BcryptHasher } from '../../services/hash.password.bcrypt';
-// import { genSalt, hash } from 'bcryptjs';
 
 describe('UserController (unit)', () => {
   let repository: StubbedInstanceWithSinonAccessor<UserRepository>;
@@ -84,10 +83,6 @@ describe('UserController (unit)', () => {
       });
       repository.stubs.find.resolves(fetchedUsers);
       const selectedUser = await controller.findById('uuid1');
-      // const user = await controller.find();
-      // const selectedUser = user.find((res)=>{
-      //   return res.id==="uuid1"
-      // })
       expect(selectedUser).to.deepEqual(userSelected);
       sinon.assert.calledWithMatch(repository.stubs.find);
 
@@ -129,9 +124,6 @@ describe('UserController (unit)', () => {
         username: 'vinayak',
         password: 'vinayak123'
       });
-      // const salt=await genSalt(10)
-      // const hashedpass = await hash(userData.password!,salt)
-      // userData.password = hashedpass;
       await controller.create(userData);
       sinon.assert.calledWithMatch(repository.stubs.create);
     });
