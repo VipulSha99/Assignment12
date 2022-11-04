@@ -16,6 +16,8 @@ describe('UserController (unit)', () => {
   let jwtService: StubbedInstanceWithSinonAccessor<JwtService>;
   let bcryptHasher: StubbedInstanceWithSinonAccessor<BcryptHasher>;
   beforeEach(givenStubbedRepository);
+  beforeEach(givenStubbedjwtService);
+  beforeEach(givenStubbedBcryptHasher);
 
   const fetchedUsers = [
     new User({
@@ -111,30 +113,37 @@ describe('UserController (unit)', () => {
       sinon.assert.calledWithMatch(repository.stubs.updateById, 'uuid1');
     });
 
-    // it('adding a new user',async ()=>{
-    //   const userData =new User({
-    //     firstName: 'vinayak',
-    //     middleName: 'GOAT',
-    //     lastName: 'Gupta',
-    //     address: 'India',
-    //     email: 'vg@gmail.com',
-    //     phoneNumber: 10303010,
-    //     createdAt: new Date('1986-09-13T04:16:36.382Z'),
-    //     updatedAt: new Date('1986-09-13T04:16:36.382Z'),
-    //     rolekey: 'dasdsa',
-    //     customerId: 'dsadsa',
-    //     username: 'vinayak',
-    //     password: 'vinayak123'
-    //   });
-    //   const salt=await genSalt(10)
-    //   const hashedpass = await hash(userData.password!,salt)
-    //   userData.password = hashedpass;
-    //   await repository.create(userData);
-    //   sinon.assert.calledWithMatch(repository.stubs.create);
-    // });
+    it('adding a new user',async ()=>{
+      const controller = new UserController(repository,jwtService,bcryptHasher);
+      const userData =new User({
+        firstName: 'vinayak',
+        middleName: 'GOAT',
+        lastName: 'Gupta',
+        address: 'India',
+        email: 'vg@gmail.com',
+        phoneNumber: 10303010,
+        createdAt: new Date('1986-09-13T04:16:36.382Z'),
+        updatedAt: new Date('1986-09-13T04:16:36.382Z'),
+        rolekey: 'dasdsa',
+        customerId: 'dsadsa',
+        username: 'vinayak',
+        password: 'vinayak123'
+      });
+      // const salt=await genSalt(10)
+      // const hashedpass = await hash(userData.password!,salt)
+      // userData.password = hashedpass;
+      await controller.create(userData);
+      sinon.assert.calledWithMatch(repository.stubs.create);
+    });
 
 
   function givenStubbedRepository() {
     repository = createStubInstance(UserRepository);
+  }
+  function givenStubbedjwtService() {
+    jwtService = createStubInstance(JwtService);
+  }
+  function givenStubbedBcryptHasher() {
+    bcryptHasher = createStubInstance(BcryptHasher);
   }
 });
